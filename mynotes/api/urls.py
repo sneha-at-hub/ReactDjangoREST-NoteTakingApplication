@@ -8,6 +8,7 @@ urlpatterns =[
     
     
     path('notes/<str:pk>/update/', views.updateNote, name="update-note"),
+     path('notes/<str:pk>/delete/', views.deleteNote, name="delete-note"),
     
   
 ]

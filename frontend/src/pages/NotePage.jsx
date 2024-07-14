@@ -30,6 +30,24 @@ function NotePage() {
       body: e.target.value,
     });
   };
+  
+  const deleteNote = async () => {
+    try {
+      await fetch(`/api/notes/${id}/delete/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      navigate('/'); // Navigate to the homepage after successful deletion
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      alert('Failed to delete note. Please try again.'); // Example of showing an alert to the user
+    }
+  };
+  
+
 
   let updateNote = async () => {
     try {
@@ -63,6 +81,7 @@ function NotePage() {
             <Arrowleft onClick={handleSubmit} />
           </Link>
         </h3>
+        <button onClick={deleteNote}>Delete</button>
       </div>
       <textarea onChange={updateNoteBody} defaultValue={note?.body}></textarea>
     </div>

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.decorators import api_view
 from .models import Note
 from .serializers import NoteSerializer
@@ -58,4 +59,13 @@ def updateNote(request, pk):
         
     return Response(serializer.data)
     
-    
+@api_view(['DELETE'])
+def deleteNote(request, pk):
+    try:
+        note = Note.objects.get(id=pk)
+        note.delete()
+        return Response("Note was deleted!", status=status.HTTP_204_NO_CONTENT)
+    except Note.DoesNotExist:
+        return Response("Note not found", status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response(f"Failed to delete note. Error: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
