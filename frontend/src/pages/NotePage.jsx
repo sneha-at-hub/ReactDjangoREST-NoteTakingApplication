@@ -1,64 +1,93 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate hook
-import { ReactComponent as Arrowleft } from '../assets/arrow-left.svg';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ReactComponent as ArrowLeft } from '../assets/arrow-left.svg';
 import { Link } from 'react-router-dom';
 
 function NotePage() {
   let { id } = useParams();
-  const navigate = useNavigate(); // Use useNavigate hook instead of history
+  const navigate = useNavigate();
 
-  let [note, setNote] = useState({});
+  const [note, setNote] = useState({});
 
   useEffect(() => {
-    getNote();
+    if (id !== 'new') {
+      getNote();
+    }
   }, [id]);
 
-  let getNote = async () => {
+  const getNote = async () => {
     try {
       let response = await fetch(`/api/notes/${id}/`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch note');
+      }
       let data = await response.json();
-      console.log(data);
       setNote(data);
     } catch (error) {
       console.error('Error fetching note:', error);
+      // Handle error (e.g., show error message to the user)
     }
   };
 
-  let updateNoteBody = (e) => {
+  const updateNoteBody = (e) => {
     setNote({
       ...note,
       body: e.target.value,
     });
   };
-  
+
   const deleteNote = async () => {
     try {
-      await fetch(`/api/notes/${id}/delete/`, {
+      let response = await fetch(`http://localhost:8000/api/notes/${id}/delete/`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+          // Add other headers as necessary (e.g., Authorization)
+        },
       });
-  
+      if (!response.ok) {
+        throw new Error('Failed to delete note');
+      }
       navigate('/'); // Navigate to the homepage after successful deletion
     } catch (error) {
       console.error('Error deleting note:', error);
-      alert('Failed to delete note. Please try again.'); // Example of showing an alert to the user
+      alert('Failed to delete note. Please try again.');
     }
   };
   
 
-
-  let updateNote = async () => {
+  const createNote = async () => {
     try {
-      await fetch(`/api/notes/${id}/update/`, {  // Notice the leading '/'
-        method: "PUT",
+      let response = await fetch(`http://localhost:8000/api/notes/create/`, {
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(note)
+        body: JSON.stringify(note),
       });
+      if (!response.ok) {
+        throw new Error('Failed to create note');
+      }
+      navigate('/'); // Navigate to the homepage after successful creation
+    } catch (error) {
+      console.error('Error creating note:', error);
+      // Handle error (e.g., show error message to the user)
+    }
+  };
   
+
+  const updateNote = async () => {
+    try {
+      let response = await fetch(`http://localhost:8000/api/notes/${id}/update/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(note),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update note');
+      }
       // Optionally, you can fetch the updated note after saving
       // getNote(); // Uncomment if you want to fetch the updated note after saving
     } catch (error) {
@@ -68,9 +97,14 @@ function NotePage() {
   };
   
 
-  let handleSubmit = () => {
-    updateNote();
-    navigate('/'); // Use navigate function to go back to the homepage
+  const handleSubmit = () => {
+    if (id === 'new') {
+      createNote();
+    } else if (!note.body) {
+      deleteNote();
+    } else {
+      updateNote();
+    }
   };
 
   return (
@@ -78,12 +112,16 @@ function NotePage() {
       <div className="note-header">
         <h3>
           <Link to={`/`}>
-            <Arrowleft onClick={handleSubmit} />
+            <ArrowLeft onClick={handleSubmit} />
           </Link>
         </h3>
-        <button onClick={deleteNote}>Delete</button>
+        {id !== 'new' ? (
+          <button onClick={deleteNote}>Delete</button>
+        ) : (
+          <button onClick={handleSubmit}>Done</button>
+        )}
       </div>
-      <textarea onChange={updateNoteBody} defaultValue={note?.body}></textarea>
+      <textarea onChange={updateNoteBody} value={note.body || ''}></textarea>
     </div>
   );
 }

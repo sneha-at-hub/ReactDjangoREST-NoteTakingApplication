@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
-from .models import Note
+from rest_framework.permissions import AllowAny
 from .serializers import NoteSerializer
+from .models import Note
 
 # Create your views here.
 @api_view(['GET'])
@@ -48,6 +48,16 @@ def getNote(request, pk):
     serializer = NoteSerializer(note, many=False)  #because serialize only one objecgt
     return Response(serializer.data)
     
+    
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def createNote(request):
+    data = request.data
+    note = Note.objects.create(body=data['body'])
+    serializer = NoteSerializer(note, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['PUT'])
 def updateNote(request, pk):
     data = request.data

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Listitem from '../components/Listitem'
+import AddButton from '../components/AddButton'
 
 
 
@@ -28,6 +29,7 @@ let getNotes = async () =>{
                 <Listitem key={index} note={note} /> //setting props
             ))}
         </div>
+        <AddButton />
     </div>
   )
 }
