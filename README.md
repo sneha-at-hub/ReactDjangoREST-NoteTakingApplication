@@ -11,7 +11,7 @@ This repository contains a Notes App built with Django backend and React fronten
 Clone the repository using the command below:
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
+git clone https://github.com/your-username/your-repository.git ```
 
 
 # Django and React Integration
