@@ -47,3 +47,15 @@ def getNote(request, pk):
     serializer = NoteSerializer(note, many=False)  #because serialize only one objecgt
     return Response(serializer.data)
     
+@api_view(['PUT'])
+def updateNote(request, pk):
+    data = request.data
+    note = Note.objects.get(id=pk)
+    serializer=NoteSerializer(instance=note, data=data) #getting data from frontend
+    
+    if serializer.is_valid():
+        serializer.save()
+        
+    return Response(serializer.data)
+    
+    
