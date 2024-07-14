@@ -16,7 +16,12 @@ let getNotes = async () =>{
    setNotes(data)
 }
   return (
-    <div>
+    <div className='notes'>
+
+        <div className='notes-header'>
+            <h2 className='notes-title'>&#9782; Notes</h2>
+            <p className='notes-count'>{notes.length}</p>
+        </div>
         <div className="notes-list">
             {notes.map((note, index) => (
                 // <h3 key ={index}>{note.body}</h3>
