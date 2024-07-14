@@ -37,7 +37,7 @@ def getRoutes(request):
 
 @api_view(['GET'])
 def getNotes(request):
-    note = Note.objects.all()
+    note = Note.objects.all().order_by('-updated')
     serializer = NoteSerializer(note, many=True)
     return Response(serializer.data)
     
