@@ -37,46 +37,88 @@ def getRoutes(request):
     ]
     return Response(routes)
 
-@api_view(['GET'])
-def getNotes(request):
-    note = Note.objects.all().order_by('-updated')
-    serializer = NoteSerializer(note, many=True)
-    return Response(serializer.data)
-    
-@api_view(['GET'])
-def getNote(request, pk):
-    note = Note.objects.get(id=pk)
-    serializer = NoteSerializer(note, many=False)  #because serialize only one objecgt
-    return Response(serializer.data)
-    
-    
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def createNote(request):
-    data = request.data
-    note = Note.objects.create(body=data['body'])
-    serializer = NoteSerializer(note, many=False)
-    return Response(serializer.data)
+
+# notes GET
+# notes/create POST hence not restful approach
+# notes/<id> GET we get object
+# notes/<id> PUT updates
+# notes/<id> DELETE
 
 
-@api_view(['PUT'])
-def updateNote(request, pk):
-    data = request.data
-    note = Note.objects.get(id=pk)
-    serializer=NoteSerializer(instance=note, data=data) #getting data from frontend
+@api_view(['GET', 'POST', 'PUT', 'DELETE' ])
+def getNotes(request,):
+    if request.method == 'GET':
+        note = Note.objects.all().order_by('-updated')
+        serializer = NoteSerializer(note, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        data = request.data
+        note = Note.objects.create(body=data['body'])
+        serializer = NoteSerializer(note, many=False)
+        return Response(serializer.data)
     
-    if serializer.is_valid():
-        serializer.save()
         
-    return Response(serializer.data)
+        
     
-@api_view(['DELETE'])
-def deleteNote(request, pk):
-    try:
+@api_view(['GET', 'PUT', "DELETE"])
+def getNote(request, pk):
+    if request.method == 'GET':    
         note = Note.objects.get(id=pk)
-        note.delete()
-        return Response("Note was deleted!", status=status.HTTP_204_NO_CONTENT)
-    except Note.DoesNotExist:
-        return Response("Note not found", status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response(f"Failed to delete note. Error: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer = NoteSerializer(note, many=False)  #because serialize only one objecgt
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        data = request.data
+        note = Note.objects.get(id=pk)
+        serializer=NoteSerializer(instance=note, data=data) #getting data from frontend
+        if serializer.is_valid():
+            serializer.save()
+            
+        return Response(serializer.data)
+    
+    if request.method == 'DELETE':
+        try:
+            note = Note.objects.get(id=pk)
+            note.delete()
+            return Response("Note was deleted!", status=status.HTTP_204_NO_CONTENT)
+        except Note.DoesNotExist:
+            return Response("Note not found", status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(f"Failed to delete note. Error: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+
+
+
+    
+# @api_view(['POST'])
+# @permission_classes([AllowAny])
+# def createNote(request):
+#     data = request.data
+#     note = Note.objects.create(body=data['body'])
+#     serializer = NoteSerializer(note, many=False)
+#     return Response(serializer.data)
+
+
+# @api_view(['PUT'])
+# def updateNote(request, pk):
+#     data = request.data
+#     note = Note.objects.get(id=pk)
+#     serializer=NoteSerializer(instance=note, data=data) #getting data from frontend
+    
+#     if serializer.is_valid():
+#         serializer.save()
+        
+#     return Response(serializer.data)
+    
+# @api_view(['DELETE'])
+# def deleteNote(request, pk):
+#     try:
+#         note = Note.objects.get(id=pk)
+#         note.delete()
+#         return Response("Note was deleted!", status=status.HTTP_204_NO_CONTENT)
+#     except Note.DoesNotExist:
+#         return Response("Note not found", status=status.HTTP_404_NOT_FOUND)
+#     except Exception as e:
+#         return Response(f"Failed to delete note. Error: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
