@@ -9,7 +9,7 @@ useEffect(() => {
     getNotes()
 }, [])
 let getNotes = async () =>{
-   let response = await fetch('http://127.0.0.1:8000/api/notes/')
+   let response = await fetch('/api/notes/') //since it is going to port 3000 so we will specify proxy in package.json
    let data = await response.json()
    setNotes(data)
 }
