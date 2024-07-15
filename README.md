@@ -46,6 +46,40 @@ cd mynotes
 ```bash
 python manage.py runserver
 ```
+## Install Django REST FRAMEWORK
+
+```bash
+pip install djangorestframework
+```
+
+## Update Your Django Project Settings
+Add 'rest_framework' to the INSTALLED_APPS list in mynotes/settings.py:
+```bash
+# mynotes/settings.py
+
+INSTALLED_APPS = [
+    ...
+    'rest_framework',
+    ...
+]
+```    
+## Create a Django App
+```bash
+python manage.py startapp api
+```
+Add the new app to your INSTALLED_APPS list in mynotes/settings.py
+```bash
+# mynotes/settings.py
+
+INSTALLED_APPS = [
+    ...
+    'notes',
+    'rest_framework',
+    ...
+]
+```
+
+
 ## React
 React is the JavaScript library used for building single page interfaces out of individual pieces called components.
 
@@ -99,4 +133,4 @@ project_root/
 
 
 
-
+<img alt="html5" src="https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" /><img alt="Javascript" src="https://img.shields.io/badge/-javascript-f7df1c?style=flat-square&logo=javascript&logoColor=black" />
