@@ -3,11 +3,11 @@
 # Django 
 Django is an open-source high-level Python web framework that is easy to use for CRUD operations. 
 
-# Prerequisites
+## Prerequisites
 - Python 3.6 or later
 - pip package installer for Python
   
-# Installation
+## Installation
 Create a virtual environment:
 ```bash
 
@@ -27,13 +27,13 @@ Activate virtual environment:
 source env/bin/activate
 
 ```
-# Install Django 
+## Install Django 
 
 ```bash
 pip install django
 ```
 
-# Create a Django Project
+## Create a Django Project
 ```bash
 django-admin startproject mynotes
 ```    
@@ -42,18 +42,18 @@ django-admin startproject mynotes
 cd mynotes
 ```
 
-# Run the Development Server
+## Run the Development Server
 ```bash
 python manage.py runserver
 ```
-# React
+## React
 React is the JavaScript library used for building single page interfaces out of individual pieces called components.
 
-# Prerequisites
+## Prerequisites
 - Node.js
 - npm
 
-# Installation 
+## Installation 
 
 Create React App is an officially supported way to create single-page React applications. It offers a modern build setup with no configuration. To install Create React App globally, run
 ```bash
@@ -63,18 +63,18 @@ Once Create React App is installed, you can create a new React application. Repl
 ```bash
 npx create-react-app frontend
 ```
-## Navigate to your project directory
+### Navigate to your project directory
 ```bash
 cd frontend
 ```
-# Start the Development Server
+## Start the Development Server
 To start the development server and see React application in action
 ```bash
 npm start
 ```
 
-# OR
-# Cloning the repository
+## OR
+## Cloning the repository
 
 ```bash
 git clone -----
